@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ojy.smart_campus.mapper.GradeMapper">
+  <resultMap id="GradeResultMap" type="com.ojy.smart_campus.pojo.Grade">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="manager" jdbcType="VARCHAR" property="manager" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="telephone" jdbcType="VARCHAR" property="telephone" />
+    <result column="introduction" jdbcType="VARCHAR" property="introduction" />
+  </resultMap>
+  <delete id="deleteByIds" parameterType="java.lang.Integer">
+    delete from tb_grade
+    where id in
+    <foreach collection="array" item="id" separator="," open="(" close=")">
+      #{id}
+    </foreach>
+  </delete>
+  <insert id="insert" parameterType="com.ojy.smart_campus.pojo.Grade">
+    insert into tb_grade (id,name,  manager, email, telephone, introduction)
+    values ( #{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{manager,jdbcType=VARCHAR},
+      #{email,jdbcType=VARCHAR}, #{telephone,jdbcType=VARCHAR}, #{introduction,jdbcType=VARCHAR})
+  </insert>
+  <update id="updateById" parameterType="com.ojy.smart_campus.pojo.Grade">
+    update tb_grade
+    set name = #{name,jdbcType=INTEGER},
+      manager = #{manager,jdbcType=VARCHAR},
+      email = #{email,jdbcType=VARCHAR},
+      telephone = #{telephone,jdbcType=VARCHAR},
+      introduction = #{introduction,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

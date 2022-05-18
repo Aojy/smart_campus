@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ojy.smart_campus.mapper.ClazzMapper" >
+  <resultMap id="CalzzResultMap" type="com.ojy.smart_campus.pojo.Clazz" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="number" property="number" jdbcType="INTEGER" />
+    <result column="introduction" property="introduction" jdbcType="VARCHAR" />
+    <result column="headmaster" property="headmaster" jdbcType="VARCHAR" />
+    <result column="email" property="email" jdbcType="VARCHAR" />
+    <result column="telephone" property="telephone" jdbcType="VARCHAR" />
+    <result column="grade_name" property="gradeName" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Table_Field_List" >
+    id, name, number, introduction, headmaster, email, telephone, grade_name
+  </sql>
+
+  <select id="selectById" resultMap="CalzzResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Table_Field_List" />
+    from tb_clazz
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectClazzList" resultMap="CalzzResultMap">
+    select
+    <include refid="Table_Field_List" />
+    from tb_clazz
+  </select>
+
+
+  <delete id="deleteByIds" parameterType="java.lang.Integer" >
+    delete from tb_clazz
+    where id in
+    <foreach collection="array" item="id" separator="," open="(" close=")">
+      #{id}
+    </foreach>
+  </delete>
+  <insert id="insert" parameterType="com.ojy.smart_campus.pojo.Clazz" >
+    insert into tb_clazz (id, name, number, 
+      introduction, headmaster, email, 
+      telephone, grade_name)
+    values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{number,jdbcType=INTEGER}, 
+      #{introduction,jdbcType=VARCHAR}, #{headmaster,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, 
+      #{telephone,jdbcType=VARCHAR}, #{gradeName,jdbcType=VARCHAR})
+  </insert>
+  <update id="updateById" parameterType="com.ojy.smart_campus.pojo.Clazz" >
+    update tb_clazz
+    set name = #{name,jdbcType=VARCHAR},
+      number = #{number,jdbcType=INTEGER},
+      introduction = #{introduction,jdbcType=VARCHAR},
+      headmaster = #{headmaster,jdbcType=VARCHAR},
+      email = #{email,jdbcType=VARCHAR},
+      telephone = #{telephone,jdbcType=VARCHAR},
+      grade_name = #{gradeName,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

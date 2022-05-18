@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ojy.smart_campus.mapper.AdminMapper" >
+  <resultMap id="AdminResultMap" type="com.ojy.smart_campus.pojo.Admin" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="gender" property="gender" jdbcType="CHAR" />
+    <result column="password" property="password" jdbcType="VARCHAR" />
+    <result column="email" property="email" jdbcType="VARCHAR" />
+    <result column="telephone" property="telephone" jdbcType="VARCHAR" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="portrait_path" property="portraitPath" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Table_Field_List" >
+    id, name, gender, password, email, telephone, address, portrait_path
+  </sql>
+  <select id="selectById" resultMap="AdminResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Table_Field_List" />
+    from tb_admin
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  
+  <select id="selectAdminByAccountAndPassword" resultMap="AdminResultMap" parameterType="map">
+    select
+    <include refid="Table_Field_List" />
+    from tb_admin
+    where name = #{account} and password = #{password}
+  </select>
+  
+  <delete id="deleteByIds" parameterType="java.lang.Integer" >
+    delete from tb_admin
+    where id in
+    <foreach collection="array" separator="," item="id" open="(" close=")">
+      #{id}
+    </foreach>
+  </delete>
+  <insert id="insert" parameterType="com.ojy.smart_campus.pojo.Admin" >
+    insert into tb_admin (id, name, gender, 
+      password, email, telephone, 
+      address, portrait_path)
+    values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{gender,jdbcType=CHAR}, 
+      #{password,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{telephone,jdbcType=VARCHAR}, 
+      #{address,jdbcType=VARCHAR}, #{portraitPath,jdbcType=VARCHAR})
+  </insert>
+  <update id="updateById" parameterType="com.ojy.smart_campus.pojo.Admin" >
+    update tb_admin
+    set name = #{name,jdbcType=VARCHAR},
+      gender = #{gender,jdbcType=CHAR},
+      password = #{password,jdbcType=VARCHAR},
+      email = #{email,jdbcType=VARCHAR},
+      telephone = #{telephone,jdbcType=VARCHAR},
+      address = #{address,jdbcType=VARCHAR},
+      portrait_path = #{portraitPath,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <update id="updateAdminPassword" parameterType="map">
+    update tb_admin
+    set password = #{newPwd}
+    where id = #{id,jdbcType=INTEGER} and password = #{oldPwd}
+  </update>
+</mapper>
